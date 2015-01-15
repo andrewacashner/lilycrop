@@ -18,6 +18,7 @@
 # images when using the EPS backend.
 # This script compiles a lilypond file and then creates separate
 # cropped PDFs for the content on each separate page.
+# For some reason this process also greatly reduces the file size.
 #
 # The script checks the input file to see if there is more 
 # than one page. If there are multiple pages, it splits
