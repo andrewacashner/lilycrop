@@ -1,5 +1,5 @@
-Improving the User Experience of `Lilypond`
-------------------------------------------
+Making Music with Lilypond More Simply and Efficiently
+--------------------------------------------------------
 
 Andrew Cashner, `andrewacashner@gmail.com`
 
