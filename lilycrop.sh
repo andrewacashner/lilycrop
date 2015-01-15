@@ -2,8 +2,7 @@
 
 ##########################################################################
 # LILYCROP
-# Produce individual cropped PDF images from a 
-# lilypond file 
+# Produce individual cropped PDF images from a lilypond file 
 #
 # Andrew A. Cashner, andrewacashner@gmail.com, 2015
 # https://github.com/andrewacashner/lilypond/lilycrop.sh
@@ -12,6 +11,13 @@
 # on the lilypond-user mailing list.
 #
 ##################################################################### 
+#
+# Many lilypond users need to produce small cropped images for
+# use in other documents, such as in musicological articles.
+# But lilypond does not correctly determine the bounding boxes for 
+# images when using the EPS backend.
+# This script compiles a lilypond file and then creates separate
+# cropped PDFs for the content on each separate page.
 #
 # The script checks the input file to see if there is more 
 # than one page. If there are multiple pages, it splits
