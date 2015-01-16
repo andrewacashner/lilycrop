@@ -25,9 +25,10 @@
 # the PDF into separate PDFs and then crops the individual
 # images. If there is only one page, it crops that page.
 #
-# Usage:  lilycrop [-e] file.ly  (.ly MUST be included)
+# Usage:  lilycrop [-el] file.ly  (.ly MUST be included)
 #           option -e : Produce EPS output
 #           option -l : Write output file names to file.log
+#                         (-el for both options)
 #           default   : Produce PDF output, do not create log file
 # 
 # Output: If single page input: file-crop.eps or file_crop.pdf
