@@ -27,7 +27,8 @@
 #
 # Usage:  lilycrop [-e] file.ly  (.ly MUST be included)
 #           option -e : Produce EPS output
-#           default   : Produce PDF output
+#           option -l : Write output file names to file.log
+#           default   : Produce PDF output, do not create log file
 # 
 # Output: If single page input: file-crop.eps or file_crop.pdf
 #         If multiple pages:    file-1-crop.eps, file-2-crop.eps (or PDF)
@@ -64,10 +65,12 @@ NO_ARGS="0"
 EXIT_ERROR="85"
 PDF_MODE="0"
 EPS_MODE="1"
+OPTION_OFF="0"
+OPTION_ON="1"
 
 # Function to display help information and exit
 help_exit () {
-	echo "Usage: lilycrop [-e] file.ly"
+	echo "Usage: lilycrop [-el] file.ly"
 	echo "          Option -e : Produce EPS output"
 	echo "          Default   : Produce PDF output"
 	exit "$EXIT_ERROR"
@@ -80,26 +83,32 @@ then
 	help_exit
 fi
 
-# Set default output mode
-mode="$PDF_MODE"
+# Set default modes: PDF output, no log file
+output_mode="$PDF_MODE"
+log_mode="$OPTION_OFF"
 
-# Check for option argument to change output mode
-while getopts "e" option
+# Check for option argument to change modes
+while getopts "el" option
 do
 	case "$option" in
-		e )	mode="$EPS_MODE"
-			# Move to next argument (filename)
-			shift $(($OPTIND - 1))
+		e )	# EPS MODE
+			output_mode="$EPS_MODE"
 			;;
+
+		l )	# LOG MODE
+			log_mode="$OPTION_ON"
+			;;
+
 		* )	# Automatic error message for invalid option
 			;; 
 	esac
 done
 
-# Check for valid filename
+# Check last argument for valid filename
+shift $(($OPTIND - 1))
 if [ ! -f "$1" ]
 then
-	echo "ERROR: Invalid filename "$1""
+	echo "ERROR: Invalid filename '"$1"'"
 	help_exit
 fi
 
@@ -110,31 +119,47 @@ fi
 # If PDF mode, convert EPS back to PDF
 
 croplily () {
-	file="${1%.pdf}"
-	croppedfile="$file-crop"
+	inputfile="${1%.pdf}"
+	croppedfile="$inputfile-crop"
 
 	# Convert PDF to EPS, trim EPS bounding box
-	pdftops -eps "$file".pdf
-	cat "$file".eps | ps2eps > "$croppedfile".eps
+	pdftops -eps "$inputfile".pdf
+	cat "$inputfile".eps | ps2eps > "$croppedfile".eps
 
-	if [ "$mode" -eq "$PDF_MODE" ]
+	if [ "$output_mode" -eq "$PDF_MODE" ]
 	then
 		# PDF_MODE: Convert EPS to PDF
 		fileextension="pdf"
 		epstopdf "$croppedfile".eps
-		rm "$file".eps "$croppedfile".eps
+		rm "$inputfile".eps "$croppedfile".eps
 	else	
 		# EPS_MODE: No further action
 		fileextension="eps"
 	fi
 	
+	outputfile="$croppedfile.$fileextension"
+	
 	# Report outcome
-	echo "$terminalalert Cropped file '$croppedfile.$fileextension' produced from '$1'"
+	echo "$terminalalert Cropped file '$outputfile' produced from '$1'"
+	
+	# If LOG_MODE is selected, write new filenames out to logfile
+	if [ "$log_mode" -eq "$OPTION_ON" ]
+	then
+		logfile="$lilyinput.log"
+		echo "$outputfile" >> "$logfile"
+		echo "$terminalalert Output filenames written to '"$logfile"'"
+	fi
 }
 #########################
 
 # Get input file name
 lilyinput="${1%.ly}"
+
+# If there is an old log file, remove it
+if [ -f "$lilyinput.log" ]
+then
+	rm "$lilyinput.log"
+fi
 
 # Compile with lilypond
 lilypond "$lilyinput"
