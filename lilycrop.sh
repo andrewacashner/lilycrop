@@ -5,7 +5,7 @@
 # Produce individual cropped EPS or PDF images from a lilypond file 
 #
 # Andrew A. Cashner, andrewacashner@gmail.com, 2015
-# https://github.com/andrewacashner/lilypond/lilycrop.sh
+# https://github.com/andrewacashner/lilycrop/lilycrop.sh
 #
 # The basic cropping technique comes from Andrea, jayaratna@gmail.com, 
 # on the lilypond-user mailing list.

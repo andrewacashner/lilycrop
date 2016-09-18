@@ -1,0 +1,10 @@
+`lilycrop.sh`
+------------
+
+Andrew Cashner, `andrewacashner at gmail.com`
+
+BASH script to produce separate cropped PDF images from a `lilypond` file
+
+This software is in the public domain.
+You may do what you like with it.
+I provide no warranty of any kind.
